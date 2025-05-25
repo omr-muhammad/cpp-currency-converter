@@ -4,13 +4,16 @@
 #define CLSMAINSCREEN_H
 
 #include <iostream>
+#include <string>
+#include <cstdlib> // For system("clear")
+#include "read.h"
 
 using namespace std;
 
 class clsMainScreen
 {
 private:
-    enum options
+    enum _options
     {
         enCurrencyList = 1,
         enUpdateRate,
@@ -18,39 +21,47 @@ private:
         enExit
     };
 
-    void _displayMenu()
+    static void backMainMenu()
     {
-        cout << "Welcome to the Currency Exchange Application!" << endl;
+        cout << "Press any key to return to the main menu..." << endl;
+        system("pause > nul");
+    }
+
+    static void _displayMenu()
+    {
+        cout << "            Currency Exchange Application!            \n";
+        cout << "---------------------------------------------\n";
         cout << "Please select an option:" << endl;
         cout << "1. View Currency List" << endl;
         cout << "2. Update Exchange Rates" << endl;
         cout << "3. Currency Converter" << endl;
         cout << "4. Exit" << endl;
+        cout << "---------------------------------------------\n";
     }
 
-    void _showCurrencyList()
+    static void _showCurrencyList()
     {
         cout << "Displaying available currencies..." << endl;
         // Here you would typically fetch and display the list of currencies.
     }
 
-    void _updateExchangeRates()
+    static void _updateExchangeRates()
     {
         cout << "Updating exchange rates..." << endl;
         // Here you would typically call a service to update the rates.
     }
 
-    void _openCurrencyConverter()
+    static void _openCurrencyConverter()
     {
         cout << "Opening currency converter..." << endl;
         // Here you would typically open the currency converter interface.
     }
 
-    void _performUserAction(int action)
+    static void _performUserAction(int action)
     {
         system("clear");
 
-        switch (action)
+        switch (_options(action))
         {
         case enCurrencyList:
             _showCurrencyList();
@@ -66,9 +77,31 @@ private:
         default:
             cout << "Invalid option selected." << endl;
         }
+
+        backMainMenu();
     }
 
 public:
+    static void run()
+    {
+        int userChoice = 0;
+
+        while (true)
+        {
+            system("clear");
+            _displayMenu();
+
+            userChoice = read::numInRange<int>("\n\nPlease Enter Your Choice", 1, 4);
+
+            if (userChoice == enExit)
+            {
+                cout << "Exiting the application. Goodbye!" << endl;
+                break; // Exit the loop and end the program
+            }
+
+            _performUserAction(userChoice);
+        }
+    }
 };
 
 #endif // CLSMAINSCREEN_H

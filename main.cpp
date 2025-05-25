@@ -8,10 +8,12 @@
 #include <string>
 #include <math.h>
 
+#include "./include/clsMainScreen.h"
+
 using namespace std;
 
 int main()
 {
-  cout << "Welcome to the program!" << endl;
-  return 0;
+    clsMainScreen::run();
+    return 0;
 }
