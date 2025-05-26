@@ -49,8 +49,7 @@ private:
 
     static void _updateExchangeRates()
     {
-        cout << "Updating exchange rates..." << endl;
-        // Here you would typically call a service to update the rates.
+        clsCurrencyUI::updateCurrencyRateUI();
     }
 
     static void _openCurrencyConverter()

@@ -6,7 +6,9 @@
 #include <iostream>
 #include <iomanip>
 #include <vector>
+#include <string>
 
+#include "read.h"
 #include "clsCurrency.h"
 
 using namespace std;
@@ -58,6 +60,19 @@ private:
         cout << string(95, '-') << endl;
     }
 
+    static bool _getNewRate(double &newRate)
+    {
+        newRate = read::validatedUserInput<double>("Enter New Exchange Rate or '0' to cancel: ");
+
+        if (newRate <= 0)
+        {
+            cout << "Update cancelled.\n";
+            return false;
+        }
+
+        return true;
+    }
+
 public:
     static void displayCurrencyList()
     {
@@ -66,6 +81,51 @@ public:
         _displayCurrencyHeader();
         _displayCurrencyBody(currencies);
         _displayCurrencyFooter();
+    }
+
+    static void updateCurrencyRateUI()
+    {
+        while (true)
+        {
+            system("clear");
+            string curCode = read::validatedUserInput<string>("Enter Currency Code: ");
+
+            clsCurrency *currency = clsCurrency::findCurrByCode(curCode);
+
+            if (!currency)
+            {
+                cout << "Currency with code '" << curCode << "' not found.\n";
+
+                if (read::yesOrNo("Do you want to try again?") == 'y')
+                    continue;
+
+                break;
+            }
+
+            cout << "\nCurrent Currency Details:\n";
+            currency->printCurrency();
+
+            if (read::yesOrNo("Do you want to update this currency?") != 'y')
+            {
+                cout << "Update cancelled.\n";
+                return;
+            }
+
+            double newRate;
+
+            if (!_getNewRate(newRate))
+                break;
+
+            if (currency->updateRate(newRate))
+            {
+                cout << "\nNew Currency Details:\n";
+                currency->printCurrency();
+                return;
+            }
+
+            cout << "Failed to update the exchange rate. Please try again later.\n";
+            return;
+        }
     }
 };
 

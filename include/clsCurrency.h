@@ -47,32 +47,18 @@ private:
         return clsCurrency(countryName, curCode, curName, curRate);
     }
 
-    static void _saveCurrenciesToFile()
+    static bool _saveCurrenciesToFile()
     {
         ofstream file(_filePath);
 
         if (!file.is_open())
-        {
-            cerr << "Error opening file: " << _filePath << endl;
-            return;
-        }
+            return false;
 
         for (const auto &currency : _currencies)
-        {
             file << _convertObjectToString(currency) << endl;
-        }
 
         file.close();
-    }
-
-    void _printCurrency() const
-    {
-        cout << "----------------------------------------------\n";
-        cout << "Country: " << _countryName << endl;
-        cout << "Currency Code: " << _curCode << endl;
-        cout << "Currency Name: " << _curName << endl;
-        cout << "Exchange Rate: " << fixed << setprecision(2) << _curRate << endl;
-        cout << "---------------------------------------------\n";
+        return true;
     }
 
 public:
@@ -152,6 +138,16 @@ public:
     }
 
     // Methods
+    void printCurrency() const
+    {
+        cout << "----------------------------------------------\n";
+        cout << "Country: " << _countryName << endl;
+        cout << "Currency Code: " << _curCode << endl;
+        cout << "Currency Name: " << _curName << endl;
+        cout << "Exchange Rate: " << fixed << setprecision(2) << _curRate << endl;
+        cout << "---------------------------------------------\n";
+    }
+
     void convertCurrency(string convertToCode, double convertToRate, double amount)
     {
         double convertAmountToUSD = amount / _curRate;
@@ -161,6 +157,12 @@ public:
         cout << "Converting " << _curCode << " to " << convertToCode << endl;
         cout << amount << " " << _curCode << " = " << fixed << setprecision(2) << convertedAmount << " " << convertToCode << endl;
         cout << "----------------------------------------------\n";
+    }
+
+    bool updateRate(double newRate)
+    {
+        setCurRate(newRate);
+        return _saveCurrenciesToFile();
     }
 };
 
