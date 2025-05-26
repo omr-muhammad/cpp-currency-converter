@@ -6,6 +6,9 @@
 #include <iostream>
 #include <string>
 #include <cstdlib> // For system("clear")
+
+#include "clsCurrecnyUI.h"
+#include "clsCurrency.h"
 #include "read.h"
 
 using namespace std;
@@ -41,8 +44,7 @@ private:
 
     static void _showCurrencyList()
     {
-        cout << "Displaying available currencies..." << endl;
-        // Here you would typically fetch and display the list of currencies.
+        clsCurrencyUI::displayCurrencyList();
     }
 
     static void _updateExchangeRates()
@@ -84,6 +86,7 @@ private:
 public:
     static void run()
     {
+        clsCurrency::loadCurrenciesFromFile(); // Load currencies from file at the start
         int userChoice = 0;
 
         while (true)
