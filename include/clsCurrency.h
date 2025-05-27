@@ -109,7 +109,7 @@ public:
         file.close();
     }
 
-    static clsCurrency *findCurrByCode(const string &curCode)
+    static clsCurrency *findCurr(const string &curCode)
     {
         auto it = find_if(_currencies.begin(), _currencies.end(),
                           [&curCode](const clsCurrency &currency)
@@ -123,12 +123,15 @@ public:
         return &(*it);
     }
 
-    static clsCurrency *findCurrByCountry(const string &countryName)
+    static clsCurrency *findCurr(const string &curCode, const string &countryName)
     {
         auto it = find_if(_currencies.begin(), _currencies.end(),
-                          [&countryName](const clsCurrency &currency)
+                          [&curCode, &countryName](const clsCurrency &currency)
                           {
-                              return clsString::lowerStr(currency.getCountryName()) == clsString::lowerStr(countryName);
+                              bool matchCode = clsString::lowerStr(currency.getCurCode()) == clsString::lowerStr(curCode);
+                              bool matchCountry = clsString::lowerStr(currency.getCountryName()) == clsString::lowerStr(countryName);
+
+                              return matchCode && matchCountry;
                           });
 
         if (it == _currencies.end())
@@ -149,15 +152,12 @@ public:
         cout << "---------------------------------------------\n";
     }
 
-    void convertCurrency(string convertToCode, double convertToRate, double amount)
+    double convertCurrency(double curRate, double amount)
     {
         double convertAmountToUSD = amount / _curRate;
-        double convertedAmount = convertAmountToUSD * convertToRate;
+        double convertedAmount = convertAmountToUSD * curRate;
 
-        cout << "----------------------------------------------\n";
-        cout << "Converting " << _curCode << " to " << convertToCode << endl;
-        cout << amount << " " << _curCode << " = " << fixed << setprecision(2) << convertedAmount << " " << convertToCode << endl;
-        cout << "----------------------------------------------\n";
+        return convertedAmount;
     }
 
     bool updateRate(double newRate)
