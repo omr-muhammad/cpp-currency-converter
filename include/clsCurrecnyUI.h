@@ -99,7 +99,7 @@ public:
                 if (read::yesOrNo("Do you want to try again?") == 'y')
                     continue;
 
-                break;
+                return;
             }
 
             cout << "\nCurrent Currency Details:\n";
@@ -114,7 +114,7 @@ public:
             double newRate;
 
             if (!_getNewRate(newRate))
-                break;
+                return;
 
             if (currency->updateRate(newRate))
             {
