@@ -1,14 +1,16 @@
 # Currency Exchange Application
 
-A C++ console application for currency conversion and exchange rate management. This application provides real-time currency conversion capabilities using up-to-date exchange rates for various world currencies.
+A fully Object-Oriented C++ console application for currency conversion and exchange rate management. This application provides real-time currency conversion capabilities using up-to-date exchange rates for various world currencies, built with modern OOP principles for maintainability and extensibility.
 
 ## Features
 
+- Fully Object-Oriented architecture with clean separation of concerns
 - Support for 170+ world currencies
 - Real-time currency conversion
 - User-friendly console interface
 - Accurate exchange rates
 - Easy-to-use menu system
+- Modular and maintainable codebase
 
 ## Project Structure
 
