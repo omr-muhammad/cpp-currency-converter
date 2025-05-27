@@ -60,6 +60,26 @@ private:
         cout << string(95, '-') << endl;
     }
 
+    static clsCurrency *_getCurrency()
+    {
+        while (true)
+        {
+            string curCode = read::validatedUserInput<string>("Enter Currency Code or 0 to canecl: ");
+
+            if (curCode == "0")
+                return nullptr;
+
+            clsCurrency *currency = clsCurrency::findCurrByCode(curCode);
+
+            if (currency)
+                return currency;
+
+            // If we reach here, the currency was not found
+            if (read::yesOrNo("Currency not found. Do you want to try again?") != 'y')
+                return nullptr;
+        }
+    }
+
     static bool _getNewRate(double &newRate)
     {
         newRate = read::validatedUserInput<double>("Enter New Exchange Rate or '0' to cancel: ");
@@ -88,21 +108,11 @@ public:
         while (true)
         {
             system("clear");
-            string curCode = read::validatedUserInput<string>("Enter Currency Code: ");
 
-            clsCurrency *currency = clsCurrency::findCurrByCode(curCode);
-
+            clsCurrency *currency = _getCurrency();
             if (!currency)
-            {
-                cout << "Currency with code '" << curCode << "' not found.\n";
-
-                if (read::yesOrNo("Do you want to try again?") == 'y')
-                    continue;
-
                 return;
-            }
 
-            cout << "\nCurrent Currency Details:\n";
             currency->printCurrency();
 
             if (read::yesOrNo("Do you want to update this currency?") != 'y')
@@ -118,7 +128,6 @@ public:
 
             if (currency->updateRate(newRate))
             {
-                cout << "\nNew Currency Details:\n";
                 currency->printCurrency();
                 return;
             }

@@ -140,6 +140,7 @@ public:
     // Methods
     void printCurrency() const
     {
+        cout << "\nCurrency Details:\n";
         cout << "----------------------------------------------\n";
         cout << "Country: " << _countryName << endl;
         cout << "Currency Code: " << _curCode << endl;
