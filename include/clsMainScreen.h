@@ -24,7 +24,7 @@ private:
         enExit
     };
 
-    static void backMainMenu()
+    static void _backMainMenu()
     {
         cout << "Press any key to return to the main menu..." << endl;
         system("pause > nul");
@@ -54,8 +54,7 @@ private:
 
     static void _openCurrencyConverter()
     {
-        cout << "Opening currency converter..." << endl;
-        // Here you would typically open the currency converter interface.
+        clsCurrencyUI::convertCurrencyUI();
     }
 
     static void _performUserAction(int action)
@@ -79,7 +78,7 @@ private:
             cout << "Invalid option selected." << endl;
         }
 
-        backMainMenu();
+        _backMainMenu();
     }
 
 public:

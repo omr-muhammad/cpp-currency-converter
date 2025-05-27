@@ -60,16 +60,21 @@ private:
         cout << string(95, '-') << endl;
     }
 
-    static clsCurrency *_getCurrency()
+    static clsCurrency *_getCurrency(string message = "Enter Currency Code or 0 to cancel: ")
     {
         while (true)
         {
-            string curCode = read::validatedUserInput<string>("Enter Currency Code or 0 to canecl: ");
+            string curCode = read::validatedUserInput<string>(message);
 
             if (curCode == "0")
                 return nullptr;
 
-            clsCurrency *currency = clsCurrency::findCurrByCode(curCode);
+            string countryName = read::validatedUserInput<string>("Enter Country Name or 0 to cancel: ");
+
+            if (countryName == "0")
+                return nullptr;
+
+            clsCurrency *currency = clsCurrency::findCurr(curCode, countryName);
 
             if (currency)
                 return currency;
@@ -91,6 +96,15 @@ private:
         }
 
         return true;
+    }
+
+    static void _printConversionResult(double result, const clsCurrency &fromCurrency, const clsCurrency &toCurrency, double amount)
+    {
+        cout << "\nConversion Result:\n";
+        cout << "----------------------------------------------\n";
+        cout << "Converted " << amount << " " << fromCurrency.getCurCode() << " to "
+             << fixed << setprecision(2) << result << " " << toCurrency.getCurCode() << endl;
+        cout << "---------------------------------------------\n";
     }
 
 public:
@@ -136,6 +150,46 @@ public:
             return;
         }
     }
-};
 
+    static void convertCurrencyUI()
+    {
+        while (true)
+        {
+            system("clear");
+
+            clsCurrency *fromCurrency = _getCurrency("Enter From Currency Code or 0 to cancel: ");
+
+            if (!fromCurrency)
+                return;
+
+            fromCurrency->printCurrency();
+
+            clsCurrency *toCurrency = _getCurrency("Enter To Currency Code or 0 to cancel: ");
+
+            if (!toCurrency)
+                return;
+
+            if (toCurrency == fromCurrency)
+            {
+                cout << "You cannot convert a currency to itself. Please try again.\n";
+                continue;
+            }
+
+            double amount = read::validatedUserInput<double>("Enter Amount to Convert or '0' to cancel: ");
+
+            if (amount <= 0)
+            {
+                cout << "\nConversion cancelled.\n";
+                return;
+            }
+
+            double result = fromCurrency->convertCurrency(toCurrency->getCurRate(), amount);
+
+            _printConversionResult(result, *fromCurrency, *toCurrency, amount);
+
+            if (read::yesOrNo("Do you want to convert another currency?") != 'y')
+                return;
+        }
+    }
+};
 #endif // CLSCURRENCYUI_H
